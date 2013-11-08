@@ -108,7 +108,7 @@
         [[DBFilesystem sharedFilesystem] deletePath:oldPath error:nil];
     }
 
-    DBPath *path = [self pathFromDatePicker];
+    DBPath *path = [self pathFromDatePicker]; // Ex: 11-05-2013.png
     DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:nil];
     [file writeData:UIImagePNGRepresentation(self.image) error:nil];
     [file close];
@@ -169,17 +169,17 @@
 {
     /*
      * Unique filename containing the date selected.
-     * Ex: 11-05-2013 or 11-05-2013 (1)
+     * Ex: 11-05-2013.png or 11-05-2013 (1).png
      */
 
     DBPath *path = nil;
-    NSString *filename = [NSString stringWithFormat:@"%@.jpg", [self.dateFormatter stringFromDate:self.datePicker.date]];
+    NSString *filename = [NSString stringWithFormat:@"%@.png", [self.dateFormatter stringFromDate:self.datePicker.date]];
     int i = 1;
 
     while (path == nil) {
         // Check if this filename already exists.
         if ([[DBFilesystem sharedFilesystem] fileInfoForPath:[[DBPath root] childPath:filename] error:nil]) {
-            filename = [NSString stringWithFormat:@"%@ (%d).jpg", [self.dateFormatter stringFromDate:self.datePicker.date], i];
+            filename = [NSString stringWithFormat:@"%@ (%d).png", [self.dateFormatter stringFromDate:self.datePicker.date], i];
             i++;
         } else {
             path = [[DBPath root] childPath:filename];
