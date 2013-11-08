@@ -27,6 +27,8 @@
 		0877DB7D182C62E100C37D8F /* SPAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0877DB7B182C62E100C37D8F /* SPAuthViewController.m */; };
 		0877DB7E182C62E100C37D8F /* SPAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0877DB7C182C62E100C37D8F /* SPAuthViewController.xib */; };
 		0877DB80182C671C00C37D8F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0877DB7F182C671C00C37D8F /* Images.xcassets */; };
+		0877DB89182C6C2200C37D8F /* SPRunListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0877DB87182C6C2100C37D8F /* SPRunListViewController.m */; };
+		0877DB8A182C6C2200C37D8F /* SPRunListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0877DB88182C6C2100C37D8F /* SPRunListViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,9 @@
 		0877DB7B182C62E100C37D8F /* SPAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPAuthViewController.m; sourceTree = "<group>"; };
 		0877DB7C182C62E100C37D8F /* SPAuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SPAuthViewController.xib; sourceTree = "<group>"; };
 		0877DB7F182C671C00C37D8F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		0877DB86182C6C2100C37D8F /* SPRunListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRunListViewController.h; sourceTree = "<group>"; };
+		0877DB87182C6C2100C37D8F /* SPRunListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRunListViewController.m; sourceTree = "<group>"; };
+		0877DB88182C6C2100C37D8F /* SPRunListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SPRunListViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +146,9 @@
 				0877DB7A182C62E100C37D8F /* SPAuthViewController.h */,
 				0877DB7B182C62E100C37D8F /* SPAuthViewController.m */,
 				0877DB7C182C62E100C37D8F /* SPAuthViewController.xib */,
+				0877DB86182C6C2100C37D8F /* SPRunListViewController.h */,
+				0877DB87182C6C2100C37D8F /* SPRunListViewController.m */,
+				0877DB88182C6C2100C37D8F /* SPRunListViewController.xib */,
 				0877DB7F182C671C00C37D8F /* Images.xcassets */,
 				0877DB40182C5CB500C37D8F /* Supporting Files */,
 			);
@@ -256,6 +264,7 @@
 				0877DB80182C671C00C37D8F /* Images.xcassets in Resources */,
 				0877DB7E182C62E100C37D8F /* SPAuthViewController.xib in Resources */,
 				0877DB44182C5CB500C37D8F /* InfoPlist.strings in Resources */,
+				0877DB8A182C6C2200C37D8F /* SPRunListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +286,7 @@
 				0877DB7D182C62E100C37D8F /* SPAuthViewController.m in Sources */,
 				0877DB46182C5CB500C37D8F /* main.m in Sources */,
 				0877DB4A182C5CB500C37D8F /* SPAppDelegate.m in Sources */,
+				0877DB89182C6C2200C37D8F /* SPRunListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
