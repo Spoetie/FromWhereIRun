@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Dropbox/Dropbox.h>
 
 @interface SPRunViewController : UIViewController
 
 - (id)initWithWithDatastore:(DBDatastore *)store;
+- (id)initWithWithDatastore:(DBDatastore *)store record:(DBRecord *)record;
 
 @end

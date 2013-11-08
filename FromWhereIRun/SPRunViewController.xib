@@ -7,6 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SPRunViewController">
             <connections>
                 <outlet property="datePicker" destination="9R3-Uj-ifH" id="pf4-dv-TV0"/>
+                <outlet property="deleteButton" destination="cqk-6G-Me9" id="JOX-Sy-rr3"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -44,14 +45,27 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     </timeZone>
                 </datePicker>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c85-2M-kma">
-                    <rect key="frame" x="115" y="449" width="90" height="35"/>
+                    <rect key="frame" x="100" y="404" width="120" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="Save Run">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
                         <action selector="saveButtonPressed:" destination="-1" eventType="touchUpInside" id="5R1-xQ-sG8"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cqk-6G-Me9">
+                    <rect key="frame" x="100" y="447" width="120" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <color key="tintColor" red="0.98053252700000004" green="0.1542353051" blue="0.2481825117" alpha="1" colorSpace="calibratedRGB"/>
+                    <state key="normal" title="Delete Run">
+                        <color key="titleColor" red="0.98053252696990967" green="0.15423530514217493" blue="0.24818251166065622" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="deleteButtonPressed:" destination="-1" eventType="touchUpInside" id="Mkp-Zg-keI"/>
                     </connections>
                 </button>
             </subviews>
