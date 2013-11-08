@@ -23,15 +23,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"3vd1skts4bpm221" secret:@"1r0gjas376qzg4g"];
+    [DBAccountManager setSharedManager:accountManager];
+
     SPRunListViewController *runListViewController = [[SPRunListViewController alloc] initWithNibName:@"SPRunListViewController" bundle:nil];
 
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:runListViewController];
 
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
-
-    DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"3vd1skts4bpm221" secret:@"1r0gjas376qzg4g"];
-    [DBAccountManager setSharedManager:accountManager];
 
     self.authViewController = [[SPAuthViewController alloc] initWithNibName:@"SPAuthViewController" bundle:nil];
 

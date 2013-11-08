@@ -9,23 +9,19 @@
 #import <Dropbox/Dropbox.h>
 
 #import "SPRunListViewController.h"
+#import "SPRunViewController.h"
 
 NSString * const SPLogoutNotification = @"SPLogoutNotification";
 
 @interface SPRunListViewController ()
 
+@property (strong, nonatomic) DBDatastore *store;
+@property (strong, nonatomic) NSArray *runs;
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
+
 @end
 
 @implementation SPRunListViewController
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -33,7 +29,29 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonPressed)];
 
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed)];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    DBAccount *account = [[DBAccountManager sharedManager] linkedAccount];
+    if (account) {
+
+        if (self.store == nil) {
+            self.store = [DBDatastore openDefaultStoreForAccount:account error:nil];
+        }
+
+        DBTable *table = [self.store getTable:@"runs"];
+
+        NSLog(@"%@ %@", self.store, table);
+
+        // Display all runs
+        self.runs = [table query:nil error:nil];
+
+        NSLog(@"RUNS %@", self.runs);
+
+        [self.tableView reloadData];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -46,69 +64,33 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    return [self.runs count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"RunCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    
-    // Configure the cell...
-    
+
+    DBRecord *record = self.runs[indexPath.row];
+
+    NSDate *date = record[@"date"];
+    if (self.dateFormatter == nil) {
+        self.dateFormatter = [[NSDateFormatter alloc] init];
+        self.dateFormatter.dateFormat = @"MMMM d yyyy";
+    }
+    cell.detailTextLabel.text = [self.dateFormatter stringFromDate:date];
+
     return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Table view delegate
@@ -127,6 +109,13 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
 }
  
  */
+
+- (void)addButtonPressed
+{
+    SPRunViewController *runViewController = [[SPRunViewController alloc] initWithWithDatastore:self.store];
+
+    [self.navigationController pushViewController:runViewController animated:YES];
+}
 
 - (void)logoutButtonPressed
 {
