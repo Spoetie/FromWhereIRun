@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 Spoetie. All rights reserved.
 //
 
-#import <Dropbox/Dropbox.h>
-
 #import "SPRunListViewController.h"
 #import "SPRunViewController.h"
 
@@ -36,6 +34,10 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    /*
+     * Reload runs when view appears. This is a hack to keep everything nicely updated.
+     */
+
     DBAccount *account = [[DBAccountManager sharedManager] linkedAccount];
     if (account) {
 
@@ -79,6 +81,9 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
 
     DBRecord *record = self.runs[indexPath.row];
 
+    /*
+     * Display the run photo.
+     */
     DBPath *path = [[DBPath root] childPath:record[@"imagePath"]];
     DBFile *file = [[DBFilesystem sharedFilesystem] openFile:path error:nil];
     if (file) {
@@ -86,6 +91,9 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
         cell.imageView.image = [UIImage imageWithData:data];
     }
 
+    /*
+     * Display the run date.
+     */
     NSDate *date = record[@"date"];
     if (self.dateFormatter == nil) {
         self.dateFormatter = [[NSDateFormatter alloc] init];
