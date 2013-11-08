@@ -27,6 +27,8 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
 {
     [super viewDidLoad];
 
+    self.title = @"From Where I Run";
+
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonPressed)];
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed)];
@@ -37,27 +39,22 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
     DBAccount *account = [[DBAccountManager sharedManager] linkedAccount];
     if (account) {
 
+        if ([DBFilesystem sharedFilesystem] == nil) {
+            DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
+            [DBFilesystem setSharedFilesystem:filesystem];
+        }
+
         if (self.store == nil) {
             self.store = [DBDatastore openDefaultStoreForAccount:account error:nil];
         }
 
         DBTable *table = [self.store getTable:@"runs"];
 
-        NSLog(@"%@ %@", self.store, table);
-
         // Display all runs
         self.runs = [table query:nil error:nil];
 
-        NSLog(@"RUNS %@", self.runs);
-
         [self.tableView reloadData];
     }
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -82,12 +79,19 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
 
     DBRecord *record = self.runs[indexPath.row];
 
+    DBPath *path = [[DBPath root] childPath:record[@"imagePath"]];
+    DBFile *file = [[DBFilesystem sharedFilesystem] openFile:path error:nil];
+    if (file) {
+        NSData *data = [file readData:nil];
+        cell.imageView.image = [UIImage imageWithData:data];
+    }
+
     NSDate *date = record[@"date"];
     if (self.dateFormatter == nil) {
         self.dateFormatter = [[NSDateFormatter alloc] init];
         self.dateFormatter.dateFormat = @"MMMM d yyyy";
     }
-    cell.detailTextLabel.text = [self.dateFormatter stringFromDate:date];
+    cell.textLabel.text = [self.dateFormatter stringFromDate:date];
 
     return cell;
 }
@@ -96,14 +100,12 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
 {
     DBRecord *record = self.runs[indexPath.row];
     SPRunViewController *runViewController = [[SPRunViewController alloc] initWithWithDatastore:self.store record:record];
-
     [self.navigationController pushViewController:runViewController animated:YES];
 }
 
 - (void)addButtonPressed
 {
     SPRunViewController *runViewController = [[SPRunViewController alloc] initWithWithDatastore:self.store];
-
     [self.navigationController pushViewController:runViewController animated:YES];
 }
 
