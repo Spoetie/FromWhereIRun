@@ -35,6 +35,8 @@
     if (self) {
         self.store = store;
         self.record = record;
+        self.dateFormatter = [[NSDateFormatter alloc] init];
+        self.dateFormatter.dateFormat = @"MM-dd-yyyy";
     }
 
     return self;
@@ -46,6 +48,8 @@
 
     // Photo and date for edit mode
     if (self.record) {
+
+        // Photo
         DBPath *path = [[DBPath root] childPath:self.record[@"imagePath"]];
         DBFile *file = [[DBFilesystem sharedFilesystem] openFile:path error:nil];
         if (file) {
@@ -54,8 +58,12 @@
             self.imageView.image = self.image;
         }
 
+        // Date
         NSDate *date = self.record[@"date"];
         [self.datePicker setDate:date];
+
+        // Share button
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareRun)];
 
     } else {
         [self.deleteButton setHidden:YES];
@@ -164,11 +172,6 @@
      * Ex: 11-05-2013 or 11-05-2013 (1)
      */
 
-    if (self.dateFormatter == nil) {
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-        self.dateFormatter.dateFormat = @"MM-dd-yyyy";
-    }
-
     DBPath *path = nil;
     NSString *filename = [self.dateFormatter stringFromDate:self.datePicker.date];
     int i = 1;
@@ -184,6 +187,24 @@
     }
 
     return path;
+}
+
+- (void)shareRun
+{
+    if (self.record) {
+        NSDate *date = self.record[@"date"];
+        NSString *text = [NSString stringWithFormat:@"My run on %@ #fromWhereIRun", [self.dateFormatter stringFromDate:date]];
+
+        DBPath *path = [[DBPath root] childPath:self.record[@"imagePath"]];
+        NSString *urlString = [[DBFilesystem sharedFilesystem] fetchShareLinkForPath:path shorten:YES error:nil];
+        NSURL *shareURL = [NSURL URLWithString:urlString];
+
+        NSArray *activityItems = @[text, shareURL];
+
+        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+
+        [self presentViewController:activityViewController animated:YES completion:nil];
+    }
 }
 
 @end
