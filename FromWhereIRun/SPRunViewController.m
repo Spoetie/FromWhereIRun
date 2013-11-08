@@ -173,13 +173,13 @@
      */
 
     DBPath *path = nil;
-    NSString *filename = [self.dateFormatter stringFromDate:self.datePicker.date];
+    NSString *filename = [NSString stringWithFormat:@"%@.jpg", [self.dateFormatter stringFromDate:self.datePicker.date]];
     int i = 1;
 
     while (path == nil) {
         // Check if this filename already exists.
         if ([[DBFilesystem sharedFilesystem] fileInfoForPath:[[DBPath root] childPath:filename] error:nil]) {
-            filename = [NSString stringWithFormat:@"%@ (%d)", [self.dateFormatter stringFromDate:self.datePicker.date], i];
+            filename = [NSString stringWithFormat:@"%@ (%d).jpg", [self.dateFormatter stringFromDate:self.datePicker.date], i];
             i++;
         } else {
             path = [[DBPath root] childPath:filename];
