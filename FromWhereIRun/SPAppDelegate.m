@@ -38,6 +38,7 @@
 
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:runListViewController];
 
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
 

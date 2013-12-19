@@ -417,7 +417,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/leah/iPhone/FromWhereIRun,
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FromWhereIRun/FromWhereIRun-Prefix.pch";
@@ -434,7 +434,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/leah/iPhone/FromWhereIRun,
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FromWhereIRun/FromWhereIRun-Prefix.pch";
@@ -505,6 +505,7 @@
 				0877DB6A182C5CB600C37D8F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0877DB6B182C5CB600C37D8F /* Build configuration list for PBXNativeTarget "FromWhereIRunTests" */ = {
 			isa = XCConfigurationList;
@@ -513,6 +514,7 @@
 				0877DB6D182C5CB600C37D8F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
