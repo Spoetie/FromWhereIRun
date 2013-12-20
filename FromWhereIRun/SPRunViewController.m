@@ -101,15 +101,26 @@
     /*
      * Save photo to Dropbox app folder.
      */
+    
+    DBPath *path = nil;
+    DBFile *file = nil;
 
     if (self.record && self.record[@"imagePath"]) {
-        // Remove old photo - for this demo, simpler than modifying.
-        DBPath *oldPath = [[DBPath root] childPath:self.record[@"imagePath"]];
-        [[DBFilesystem sharedFilesystem] deletePath:oldPath error:nil];
+        path = [[DBPath root] childPath:self.record[@"imagePath"]];
+        if ([path.name isEqualToString:[self pathFromDatePicker:NO].name]) {
+            // Modify existing photo
+            file = [[DBFilesystem sharedFilesystem] openFile:path error:nil];
+        } else {
+            // Remove current photo if name has changed
+            [[DBFilesystem sharedFilesystem] deletePath:path error:nil];
+        }
     }
-
-    DBPath *path = [self pathFromDatePicker]; // Ex: 11-05-2013.png
-    DBFile *file = [[DBFilesystem sharedFilesystem] createFile:path error:nil];
+    
+    if (file == nil) {
+        path = [self pathFromDatePicker:YES]; // Ex: 11-05-2013.png
+        file = [[DBFilesystem sharedFilesystem] createFile:path error:nil];
+    }
+    
     [file writeData:UIImagePNGRepresentation(self.image) error:nil];
     [file close];
 
@@ -165,28 +176,29 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (DBPath *)pathFromDatePicker
+- (DBPath *)pathFromDatePicker:(BOOL)preventDuplicates
 {
     /*
      * Unique filename containing the date selected.
      * Ex: 11-05-2013.png or 11-05-2013 (1).png
      */
 
-    DBPath *path = nil;
     NSString *filename = [NSString stringWithFormat:@"%@.png", [self.dateFormatter stringFromDate:self.datePicker.date]];
-    int i = 1;
-
-    while (path == nil) {
-        // Check if this filename already exists.
-        if ([[DBFilesystem sharedFilesystem] fileInfoForPath:[[DBPath root] childPath:filename] error:nil]) {
-            filename = [NSString stringWithFormat:@"%@ (%d).png", [self.dateFormatter stringFromDate:self.datePicker.date], i];
-            i++;
-        } else {
-            path = [[DBPath root] childPath:filename];
+    
+    if (preventDuplicates) {
+        int i = 1;
+        while (1) {
+            // Check if this filename already exists.
+            if ([[DBFilesystem sharedFilesystem] fileInfoForPath:[[DBPath root] childPath:filename] error:nil]) {
+                filename = [NSString stringWithFormat:@"%@ (%d).png", [self.dateFormatter stringFromDate:self.datePicker.date], i];
+                i++;
+            } else {
+                break;
+            }
         }
     }
-
-    return path;
+    
+    return [[DBPath root] childPath:filename];
 }
 
 - (void)shareRun
