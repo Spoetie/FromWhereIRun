@@ -28,15 +28,7 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
     self.title = @"From Where I Run";
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonPressed)];
-
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed)];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    /*
-     * Reload runs when view appears. This is a hack to keep everything nicely updated.
-     */
 
     DBAccount *account = [[DBAccountManager sharedManager] linkedAccount];
     if (account) {
@@ -48,15 +40,31 @@ NSString * const SPLogoutNotification = @"SPLogoutNotification";
 
         if (self.store == nil) {
             self.store = [DBDatastore openDefaultStoreForAccount:account error:nil];
+            
+            __weak typeof(self) weakSelf = self;
+            [self.store addObserver:self block:^() {
+                if (weakSelf.store.status & DBDatastoreIncoming) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf refreshRuns];
+                    });
+                }
+            }];
         }
-
-        DBTable *table = [self.store getTable:@"runs"];
-
-        // Display all runs
-        self.runs = [table query:nil error:nil];
-
-        [self.tableView reloadData];
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self refreshRuns];
+}
+
+- (void)refreshRuns
+{
+    DBTable *table = [self.store getTable:@"runs"];
+    self.runs = [table query:nil error:nil];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
